@@ -4,15 +4,14 @@
 % vim: set fenc=utf-8
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% simpleresumecv.cls
+%% SIMPLE-RESUME-CV
 %% <https://github.com/zachscrivena/simple-resume-cv>
 %% This is free and unencumbered software released into the
 %% public domain; see <http://unlicense.org> for details.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \NeedsTeXFormat{LaTeX2e}
-
-\ProvidesClass{simpleresumecv}[2016/12/25 Simple Resume CV https://github.com/zachscrivena/simple-resume-cv]
+\ProvidesClass{simpleresumecv}[2016/12/20 Simple Resume CV https://github.com/zachscrivena/simple-resume-cv]
 
 \DeclareOption{a4paper}{\PassOptionsToClass{\CurrentOption}{article}}
 \DeclareOption{letterpaper}{\PassOptionsToClass{\CurrentOption}{article}}
@@ -69,14 +68,14 @@
 \ProcessOptions\relax
 
 % Use article class as the base class.
-\LoadClass[10pt,oneside]{article}
+\LoadClass[10.5pt,oneside]{article}
 
 % Geometry package for page margins.
 \RequirePackage[
-left=0.70in,
-right=0.70in,
-top=0.60in,
-bottom=0.45in,
+left=0.9in,
+right=0.9in,
+top=0.9in,
+bottom=0.9in,
 nohead,
 includefoot]{geometry}
 
@@ -93,6 +92,9 @@ includefoot]{geometry}
 
 % Current date and time.
 \RequirePackage{datetime2}
+
+% Pretty icons in title
+\RequirePackage{fontawesome5}
 
 % Timestamp.
 \newcommand{\Timestamp}{{\DTMnow}}
@@ -171,22 +173,20 @@ BoldItalicFont=FreeSerifBoldItalic]
 \newcommand{\UseHeadingFont}{\normalfont}
 \newcommand{\UseHeaderFooterFont}{\UseHeadingFont\fontsize{8.2pt}{9.5pt}\selectfont}
 \newcommand{\UseNoteFont}{\UseHeadingFont\fontsize{8pt}{9.6pt}\selectfont}
-\newcommand{\UseTitleFont}{\UseHeadingFont\fontsize{28pt}{33.6pt}\selectfont\bfseries}
+\newcommand{\UseTitleFont}{\UseHeadingFont\fontsize{23pt}{25.6pt}\selectfont\bfseries}
 \newcommand{\UseSubTitleFont}{\normalfont\fontsize{8.6pt}{10.3pt}\selectfont}
 \newcommand{\UseSectionFont}{\UseHeadingFont\fontsize{9pt}{11pt}\selectfont\bfseries}
 \newcommand{\UseSubSectionFont}{\UseHeadingFont\fontsize{8.6pt}{10.3pt}\selectfont\bfseries}
 \newcommand{\UseDetailFont}{\normalfont\fontsize{8.6pt}{10.3pt}\selectfont}
 
-% Symbols (Unicode).
-% See: https://unicode-table.com/en/
+% Symbols (unicode).
 \newcommand{\BulletSymbol}{{\normalfont\fontsize{6.5}{7.8}\selectfont\raisebox{0.17em}{\char"25A0}}}
 \newcommand{\SubBulletSymbol}{{\normalfont\fontsize{6}{7.2}\selectfont\raisebox{0.17em}{\char"25CF}}}
-\newcommand{\SubSubBulletSymbol}{{\normalfont\fontsize{6}{7.2}\selectfont\raisebox{0.17em}{\char"25CB}}}
 \newcommand{\TildeSymbol}{{\normalfont\char"007E}}
 
 % Headers and footers: Blank header, page number in footer.
 \AtEndDocument{\null\label{LastPage}}
-\newcommand{\PageKOfN}{{\UseHeaderFooterFont{Page}~\thepage~of~\pageref{LastPage}}}
+\newcommand{\PageKOfN}{}
 \newcommand{\DraftStamp}{{\UseHeaderFooterFont\color{red}DRAFT~\Timestamp}}
 
 \ifnum\TypesetInDraftMode=0
@@ -229,6 +229,19 @@ BoldItalicFont=FreeSerifBoldItalic]
 \UseTitleFont{#1}%
 \par\endgroup\par}
 
+% Macro: Title (name).
+\newcommand{\Titlen}[2]{%
+\par\pdfbookmark[1]{#1}{#1}%
+\begingroup%
+\begin{minipage}{2in}
+\UseTitleFont{#1}
+\end{minipage}
+\hfill%
+\begin{minipage}{3in}
+\hfill \UseSubTitleFont{#2}
+\end{minipage}
+\par\endgroup\par}
+
 % Macro: SubTitle (personal information below name).
 \newenvironment{SubTitle}
 {\par\vspace{0.25\baselineskip}%
@@ -251,7 +264,7 @@ BoldItalicFont=FreeSerifBoldItalic]
 \setlength\parskip{0in}%
 \setlength\topsep{0in}%
 \setlength\parsep{0in}%
-\setlength\itemsep{0.90\baselineskip}%
+\setlength\itemsep{0.85\baselineskip}%
 \setlength\partopsep{0in}%
 %\raggedright%
 }%
@@ -262,10 +275,10 @@ BoldItalicFont=FreeSerifBoldItalic]
 }
 
 % Macro: Gap (vertical gap between items in the same section).
-\newcommand{\Gap}{\par\vspace{0.45mm}\par}
+\newcommand{\Gap}{\par\vspace{0.25\baselineskip}\par}
 
 % Macro: BigGap (big vertical gap between items in the same section).
-\newcommand{\BigGap}{\par\vspace{2.25mm}\par}
+\newcommand{\BigGap}{\par\vspace{0.50\baselineskip}\par}
 
 % Macro: Section (new section for Education, Research Experience, etc.).
 \newcommand{\Section}[3]
@@ -314,21 +327,6 @@ BoldItalicFont=FreeSerifBoldItalic]
 \ignorespaces%
 }
 
-% Macro: SubSubBulletItem.
-\newsavebox{\SubSubBulletItemIndentBox}
-\newlength{\SubSubBulletItemIndentWidth}
-%
-\newcommand{\SubSubBulletItem}
-{\par\vspace{0\baselineskip}%
-\savebox{\SubSubBulletItemIndentBox}{\hspace{9.7mm}\SubSubBulletSymbol\hspace{1.5mm}}%
-\settowidth{\SubSubBulletItemIndentWidth}{\usebox{\SubSubBulletItemIndentBox}}%
-\parshape 2%
-\labelwidth \linewidth%
-\dimexpr\labelwidth+\SubSubBulletItemIndentWidth\relax \dimexpr\linewidth-\SubSubBulletItemIndentWidth\relax%
-\usebox{\SubSubBulletItemIndentBox}%
-\ignorespaces%
-}
-
 % Macro: Entry.
 \newcommand{\Entry}
 {\par\vspace{0\baselineskip}%
@@ -358,18 +356,6 @@ BoldItalicFont=FreeSerifBoldItalic]
 \labelwidth \linewidth%
 \dimexpr\labelwidth+\SubBulletItemIndentWidth\relax \dimexpr\linewidth-\SubBulletItemIndentWidth\relax%
 \usebox{\SubBulletItemIndentBox}%
-\ignorespaces%
-}
-
-% Macro: SubSubItem (aligns horizontally with SubSubBulletItem).
-\newcommand{\SubSubItem}
-{\par\vspace{0\baselineskip}%
-\savebox{\SubSubBulletItemIndentBox}{\hphantom{\hspace{9.7mm}\SubSubBulletSymbol\hspace{1.5mm}}}%
-\settowidth{\SubSubBulletItemIndentWidth}{\usebox{\SubSubBulletItemIndentBox}}%
-\parshape 2%
-\labelwidth \linewidth%
-\dimexpr\labelwidth+\SubSubBulletItemIndentWidth\relax \dimexpr\linewidth-\SubSubBulletItemIndentWidth\relax%
-\usebox{\SubSubBulletItemIndentBox}%
 \ignorespaces%
 }
 
